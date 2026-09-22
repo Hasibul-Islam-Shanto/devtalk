@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+.git
+.gitignore
+.husky
+*.md
+.env
+.env.*
+!.env.example
+npm-debug.log*
+yarn.lock
+.idea
+.DS_Store
