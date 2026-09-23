@@ -1,4 +1,4 @@
-name: hi-devs
+name: devtalk
 
 services:
   mongo:
@@ -34,6 +34,8 @@ services:
       start_period: 5s
 
   backend:
+    image: devtalk-be
+    container_name: devtalk-be
     build:
       context: ./devTalk-be
       dockerfile: Dockerfile
@@ -71,6 +73,8 @@ services:
       start_period: 25s
 
   frontend:
+    image: devtalk-fe
+    container_name: devtalk-fe
     build:
       context: ./devTalk-fe
       dockerfile: Dockerfile

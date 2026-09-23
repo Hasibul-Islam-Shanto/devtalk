@@ -35,8 +35,8 @@ export const createBlogPost = catchAsync(async (req, res) => {
 
 export const getBlogPosts = catchAsync(async (req, res) => {
   const { query } = await zParse(getAllBlogPostsSchema, req);
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
+  const page = Number.parseInt(query.page) || 1;
+  const limit = Number.parseInt(query.limit) || 10;
 
   const searchFilter: Record<string, unknown> = {};
   if (query.search) {
@@ -168,8 +168,8 @@ export const likeBlogPost = catchAsync(async (req, res) => {
 
 export const getUsersBlogs = catchAsync(async (req, res) => {
   const { query } = await zParse(getAllBlogPostsSchema, req);
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
+  const page = Number.parseInt(query.page) || 1;
+  const limit = Number.parseInt(query.limit) || 10;
   const userId = req?.user?.userId;
 
   if (!userId) {

@@ -20,8 +20,8 @@ export const getNotifications = catchAsync(async (req, res) => {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const page = parseInt(query.page);
-  const limit = parseInt(query.limit);
+  const page = Number.parseInt(query.page);
+  const limit = Number.parseInt(query.limit);
 
   const result = await getUserNotifications(userId, page, limit);
 

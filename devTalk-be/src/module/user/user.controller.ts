@@ -6,8 +6,8 @@ import { getAllUsersSchema, updateUserProfileSchema } from './user.validation';
 
 export const getAllUsers = catchAsync(async (req, res) => {
   const { query } = await zParse(getAllUsersSchema, req);
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
+  const page = Number.parseInt(query.page) || 1;
+  const limit = Number.parseInt(query.limit) || 10;
 
   const searchFilter: Record<string, unknown> = {};
   if (query.search) {

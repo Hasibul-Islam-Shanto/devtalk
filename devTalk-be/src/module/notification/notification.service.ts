@@ -114,7 +114,7 @@ export const deleteNotification = async (
 
 export const getUnreadCount = async (userId: string): Promise<number> => {
   const cached = await redis.get(unreadKey(userId));
-  if (cached !== null) return parseInt(cached);
+  if (cached !== null) return Number.parseInt(cached);
 
   const count = await Notification.countDocuments({
     recipient: userId,

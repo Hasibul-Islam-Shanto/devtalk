@@ -60,8 +60,8 @@ export const postNewComment = catchAsync(async (req, res) => {
 
 export const getAllComments = catchAsync(async (req, res) => {
   const { params, query } = await zParse(getAllCommentsSchema, req);
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
+  const page = Number.parseInt(query.page) || 1;
+  const limit = Number.parseInt(query.limit) || 10;
   const filter = {
     commentableType: params.type,
     commentableId: params.id,
