@@ -413,7 +413,7 @@ For this machine:
 ```env
 JWT_SECRET=localjwtsecretchangeit
 CLIENT_URL=http://localhost:3000
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:8082
 NEXT_PUBLIC_DEPLOY_URL=http://localhost:3000
 COOKIE_SECURE=false
 ```
@@ -429,9 +429,9 @@ docker compose up --build
 When the containers are healthy, open:
 
 - App: [http://localhost:3000](http://localhost:3000)
-- API: [http://localhost:8080/api](http://localhost:8080/api)
-- Health: [http://localhost:8080/health](http://localhost:8080/health)
-- Swagger docs: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+- API: [http://localhost:8082/api](http://localhost:8082/api)
+- Health: [http://localhost:8082/health](http://localhost:8082/health)
+- Swagger docs: [http://localhost:8082/api-docs](http://localhost:8082/api-docs)
 
 MongoDB and Redis are not published on the host. The API reaches them as `mongo` and `redis` on the Compose network. The root stack stores data in the `devtalk` database and does not enable MongoDB authentication. Redis runs inside Compose without a password, and the API connects to `redis://redis:6379`.
 
@@ -550,7 +550,7 @@ The root [`.env.example`](./.env.example) is read by [`docker-compose.yml`](./do
 | --- | --- | --- | --- |
 | `JWT_SECRET` | Yes | `localjwtsecretchangeit` | Secret used to sign tokens inside the API container. |
 | `CLIENT_URL` | Yes | `http://localhost:3000` | Frontend origin allowed by Socket.IO. Same value as `NEXT_PUBLIC_DEPLOY_URL`. |
-| `NEXT_PUBLIC_API_URL` | Yes | `http://localhost:8080` | API origin the browser and Socket.IO client call. Baked in at image build. |
+| `NEXT_PUBLIC_API_URL` | Yes | `http://localhost:8082` | API origin the browser and Socket.IO client call. Baked in at image build. |
 | `NEXT_PUBLIC_DEPLOY_URL` | Yes | `http://localhost:3000` | Public URL of this Next.js app. Baked in at image build. |
 | `COOKIE_SECURE` | No | `false` locally, `true` on HTTPS | Marks auth cookies as Secure. Defaults to `true`. |
 | `FRONTEND_PORT` | No | `3000` | Host port mapped to the frontend container. |
@@ -769,7 +769,7 @@ Typical steps:
 
 ### Frontend Cannot Reach the Backend
 
-Check that the backend is running and that `NEXT_PUBLIC_API_URL` in `devTalk-fe/.env` points to the backend origin, not the `/api` path. For local development, the value should usually be:
+Check that the backend is running and that `NEXT_PUBLIC_API_URL` in `devTalk-fe/.env` points to the backend origin, not the `/api` path. For local development without Docker, the value should usually be:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8080
@@ -803,26 +803,26 @@ If a backend response changed, update the frontend type in `devTalk-fe/types`, t
 
 ## Deployment Notes
 
-The root Compose file can run the full stack on one machine. MongoDB and Redis stay on the Docker network. Only the frontend port (`3000`) and API port (`8080`) are published.
+The root Compose file can run the full stack on one machine. MongoDB and Redis stay on the Docker network. Only the frontend port (`3000`) and API port (`8082`) are published. Port `8080` stays inside the API container so it does not conflict with Jenkins on the host.
 
 ### Local machine
 
 ```env
 JWT_SECRET=localjwtsecretchangeit
 CLIENT_URL=http://localhost:3000
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:8082
 NEXT_PUBLIC_DEPLOY_URL=http://localhost:3000
 COOKIE_SECURE=false
 ```
 
 ### EC2 or another VPS, using the public address
 
-Open ports `3000` and `8080` in the security group. Replace `203.0.113.10` with the instance public IP or DNS name.
+Open ports `3000` and `8082` in the security group. Replace `203.0.113.10` with the instance public IP or DNS name.
 
 ```env
 JWT_SECRET=changethislongrandomjwtsecret
 CLIENT_URL=http://203.0.113.10:3000
-NEXT_PUBLIC_API_URL=http://203.0.113.10:8080
+NEXT_PUBLIC_API_URL=http://203.0.113.10:8082
 NEXT_PUBLIC_DEPLOY_URL=http://203.0.113.10:3000
 COOKIE_SECURE=false
 ```

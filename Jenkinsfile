@@ -5,7 +5,7 @@ pipeline {
 
     parameters {
         string(name: 'CLIENT_URL', defaultValue: 'http://localhost:3000', description: 'Frontend origin allowed by the API and Socket.IO')
-        string(name: 'NEXT_PUBLIC_API_URL', defaultValue: 'http://localhost:8080', description: 'API URL baked into the frontend image at build time')
+        string(name: 'NEXT_PUBLIC_API_URL', defaultValue: 'http://localhost:8082', description: 'API URL baked into the frontend image at build time')
         string(name: 'NEXT_PUBLIC_DEPLOY_URL', defaultValue: 'http://localhost:3000', description: 'Public frontend URL baked into the frontend image at build time')
         string(name: 'COOKIE_SECURE', defaultValue: 'false', description: 'Set to true only when the site is served over HTTPS')
     }
