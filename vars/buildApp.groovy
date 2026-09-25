@@ -2,6 +2,13 @@ def call() {
     withCredentials([
         string(credentialsId: 'devtalk-jwt-secret', variable: 'JWT_SECRET'),
     ]) {
-        sh 'docker compose build'
+        sh '''
+            : "${CLIENT_URL:=http://localhost:3000}"
+            : "${NEXT_PUBLIC_API_URL:=http://localhost:8080}"
+            : "${NEXT_PUBLIC_DEPLOY_URL:=http://localhost:3000}"
+            : "${COOKIE_SECURE:=false}"
+            export CLIENT_URL NEXT_PUBLIC_API_URL NEXT_PUBLIC_DEPLOY_URL COOKIE_SECURE
+            docker compose build
+        '''
     }
 }
