@@ -406,12 +406,11 @@ The fastest way to run the full platform is Docker. You do not need Node.js, Mon
 
 Prerequisites: [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker Engine with the Compose plugin.
 
-Copy [`.env.example`](./.env.example) to `.env` in this directory and set the required values. Compose will refuse to start if `REDIS_PASSWORD`, `JWT_SECRET`, `CLIENT_URL`, `NEXT_PUBLIC_API_URL`, or `NEXT_PUBLIC_DEPLOY_URL` is missing. Passwords must be letters and numbers only, because `REDIS_PASSWORD` is placed directly into the Redis URL.
+Copy [`.env.example`](./.env.example) to `.env` in this directory and set the required values. Compose will refuse to start if `JWT_SECRET`, `CLIENT_URL`, `NEXT_PUBLIC_API_URL`, or `NEXT_PUBLIC_DEPLOY_URL` is missing.
 
 For this machine:
 
 ```env
-REDIS_PASSWORD=localredispass
 JWT_SECRET=localjwtsecretchangeit
 CLIENT_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=http://localhost:8080
@@ -434,7 +433,7 @@ When the containers are healthy, open:
 - Health: [http://localhost:8080/health](http://localhost:8080/health)
 - Swagger docs: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
 
-MongoDB and Redis are not published on the host. The API reaches them as `mongo` and `redis` on the Compose network. The root stack stores data in the `devtalk` database and does not enable MongoDB authentication. Redis does require `REDIS_PASSWORD`.
+MongoDB and Redis are not published on the host. The API reaches them as `mongo` and `redis` on the Compose network. The root stack stores data in the `devtalk` database and does not enable MongoDB authentication. Redis runs inside Compose without a password, and the API connects to `redis://redis:6379`.
 
 `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_DEPLOY_URL` are compiled into the frontend image. After changing either value, run `docker compose up --build` again. Restarting the containers is not enough.
 
@@ -549,7 +548,6 @@ The root [`.env.example`](./.env.example) is read by [`docker-compose.yml`](./do
 
 | Variable | Required | Local example | Description |
 | --- | --- | --- | --- |
-| `REDIS_PASSWORD` | Yes | `localredispass` | Redis password. Letters and numbers only. |
 | `JWT_SECRET` | Yes | `localjwtsecretchangeit` | Secret used to sign tokens inside the API container. |
 | `CLIENT_URL` | Yes | `http://localhost:3000` | Frontend origin allowed by Socket.IO. Same value as `NEXT_PUBLIC_DEPLOY_URL`. |
 | `NEXT_PUBLIC_API_URL` | Yes | `http://localhost:8080` | API origin the browser and Socket.IO client call. Baked in at image build. |
@@ -810,7 +808,6 @@ The root Compose file can run the full stack on one machine. MongoDB and Redis s
 ### Local machine
 
 ```env
-REDIS_PASSWORD=localredispass
 JWT_SECRET=localjwtsecretchangeit
 CLIENT_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=http://localhost:8080
@@ -823,7 +820,6 @@ COOKIE_SECURE=false
 Open ports `3000` and `8080` in the security group. Replace `203.0.113.10` with the instance public IP or DNS name.
 
 ```env
-REDIS_PASSWORD=changethisredispass
 JWT_SECRET=changethislongrandomjwtsecret
 CLIENT_URL=http://203.0.113.10:3000
 NEXT_PUBLIC_API_URL=http://203.0.113.10:8080
@@ -836,7 +832,6 @@ COOKIE_SECURE=false
 Use two hostnames. `example.com` proxies to the frontend container, and `api.example.com` proxies to the API. The frontend also owns `/api/token`, so do not send every `/api` path on the site hostname to the backend.
 
 ```env
-REDIS_PASSWORD=changethisredispass
 JWT_SECRET=changethislongrandomjwtsecret
 CLIENT_URL=https://example.com
 NEXT_PUBLIC_API_URL=https://api.example.com
@@ -846,7 +841,7 @@ COOKIE_SECURE=true
 
 Only ports `80` and `443` need to be public. Rebuild the frontend image after changing the two `NEXT_PUBLIC_` values.
 
-The root stack does not turn on MongoDB authentication. The API-only file `devTalk-be/docker-compose.yml` does. Use that file, or add credentials to the root stack, before treating the database as production-ready. Redis already requires a password.
+The root stack does not turn on MongoDB authentication. The API-only file `devTalk-be/docker-compose.yml` does. Use that file, or add credentials to the root stack, before treating the database as production-ready. Redis in both Compose files runs without a password.
 
 The apps can also be deployed without Compose:
 
