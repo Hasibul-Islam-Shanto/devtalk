@@ -43,7 +43,9 @@ const PrimaryNav = () => {
   }, []);
 
   useLayoutEffect(() => {
-    moveIndicator(targetHref);
+    // Measure after the effect so the indicator update is not a synchronous setState.
+    // A microtask still runs before the browser paints.
+    queueMicrotask(() => moveIndicator(targetHref));
   }, [moveIndicator, targetHref]);
 
   useLayoutEffect(() => {
